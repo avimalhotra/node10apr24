@@ -1,49 +1,18 @@
-const os=require("os");
-const fs=require("fs");
+const http=require('http');
+require("dotenv").config();
+const port=process.env.PORT || 3000;
 
-//console.log(os.cpus().length);
-//console.log(os.freemem()/1073741824);
-//console.log(os.totalmem()/1073741824);
-//console.log( os.arch() );
-//console.log( os.networkInterfaces() );
-//console.log(os.platform());
-//console.log(os.uptime()/(60*60*24));
-//console.log(os.userInfo());
-//console.log( 'host ', os.hostname() );
-//console.log( os.machine() );
+const server=http.createServer((req,res)=>{
+    //res.write( req.url );
+    //res.write( req.method );
+    //res.write( req.headers.host );
+    //res.statusCode=200;
+    //res.setHeader('Content-Type','text/html');
+    res.writeHead(200,{'Content-Type':'text/html'});
+    res.write("<h1>Hello World</h1>");
+    res.end();
+});
 
-
-//console.log( fs.readFileSync("src/data.txt").toString() );
-//console.log("done");
-
-
-/* fs.readFile("src/data.txt",'utf-8',(rej,data)=>{
-   try{
-        console.log(data);
-   }
-   catch(err){ 
-        console.warn(err);
-   }
-}); */
-
-/* fs.stat("src/data.txt",(err,res)=>{
-    try{ console.log(res.size, res.isFile(), res.isDirectory() ) }
-    catch(e){ console.warn(e);}
-}); */
-
-/* fs.writeFile("src/data.txt","Hello World",{encoding:'utf-8'},(err,res)=>{
-    try{ console.log("file updated")}
-    catch(e){ console.warn(e);}
-}); */
-
-
-/* fs.appendFile("src/data.txt",`${new Date().toLocaleString()} \n`,{encoding:'utf-8'},(err,res)=>{
-    try{ console.log("file updated")}
-    catch(e){ console.warn(e);}
-}); */
-
-fs.unlink("src/data.txt",(err,res)=>{
-    if(err){ console.log(err) }
-    else{ console.log("file deleted");}
-})
-
+server.listen(port,()=>{
+    console.log(`App starts at http://127.0.0.1:${port}`);  
+});
