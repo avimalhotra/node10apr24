@@ -5,14 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hello Express</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
 </head>
 <body>
     <div class="container">
         <h1>Hello Express</h1>
-        <img src="img/icon.png" alt="tech altum" width="200" height="200">
-        <img src="img/bat.svg" alt="batman" width="300" height="120">
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quaerat deleniti soluta consequatur, vitae aliquam minus in ipsum quam voluptatum, nostrum adipisci deserunt modi expedita aut pariatur facilis eum sit nulla?</p>
-    </div>
-<script src="js/jquery.js"></script>    
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam esse dolorem magni molestias vel autem possimus, nemo facere sequi, praesentium dolore! Sit amet reiciendis est eos mollitia, temporibus unde maiores.</p>
+        <section>
+            <h2>Get</h2>
+            <form action="/search">
+                <div class="row g-3 align-items-center">
+                    <div class="col-auto">
+                      <label for="search" class="col-form-label">Search</label>
+                    </div>
+                    <div class="col-auto">
+                      <input type="text" id="search" class="form-control" name="car" required>
+                    </div>
+                    <div class="col-auto">
+                      <button class="btn btn-primary">Search</button>
+                    </div>
+                  </div>
+            </form>
+            <h2>Post</h2>
+            <form action="/login" method="post" name="login">
+                <div class="row g-3 align-items-center">
+                    <div class="col-auto">
+                      <label for="email" class="col-form-label">Email</label>
+                    </div>
+                    <div class="col-auto">
+                      <input type="email" id="email" class="form-control" name="email" required>
+                    </div>
+                    <div class="col-auto">
+                        <label for="pass" class="col-form-label">Password</label>
+                      </div>
+                      <div class="col-auto">
+                        <input type="password" id="pass" class="form-control" name="password" required>
+                      </div>
+                    <div class="col-auto">
+                      <button class="btn btn-primary">Login</button>
+                    </div>
+                  </div>
+            </form>
+        </section>
+      </div>
+<script src="js/bootstrap.bundle.min.js"></script> 
+<script>
+    document.login.addEventListener("submit",function(e){
+        e.preventDefault();
+
+        const email=this.email.value;
+        const pass=this.password.value;
+
+        const data=JSON.stringify({email:email,password:pass});
+        
+        const url=`/login`;
+
+        fetch(url,{method:"POST",body:data}).then(i=>i.json()).then(i=>{
+            console.log(i);
+        }).catch(e=>{
+            console.warn(e);
+        });
+
+    })
+</script>   
 </body>
 </html>
