@@ -3,10 +3,24 @@ require("dotenv").config();
 const path=require("path");
 const port=process.env.PORT || 3000;
 const bp=require("body-parser");
+const cookie=require("cookie-parser");
+const session=require("express-session");
+const parseurl=require("parseurl");
+
 
 const app=express();
-app.use(express.static(path.resolve("src/public")));
-app.use(express.static(path.resolve("node_modules/bootstrap/dist")));
+//app.use(express.static(path.resolve("src/public")));
+//app.use(express.static(path.resolve("node_modules/bootstrap/dist")));
+
+app.set('trust proxy', 1); 
+app.use(session({
+    secret:"secret",
+    resave:false,
+    saveUninitialized:true,
+    cookie:{secure:false,maxAge:10000}
+}));
+
+app.use(cookie("secret"));
 app.use(bp.json());
 app.use(bp.text());
 app.use(bp.urlencoded({ extended: false }));
@@ -15,6 +29,17 @@ app.use(bp.urlencoded({ extended: false }));
     console.log(`Login at ${new Date().toLocaleString()}`);
     next();
 }); */
+app.use((req,res,next)=>{
+
+    if(!req.session.views ){req.session.views={}};
+
+    const pathname=parseurl(req).pathname;
+
+    req.session.views[pathname] = (req.session.views[pathname] || 0) + 1
+
+    next();
+})
+
 
 const admin=require("./routes/admin");
 const user=require("./routes/user");
@@ -29,9 +54,27 @@ app.get("/",(req,res)=>{
     //res.status(200).send(req.query);
     //res.status(200).send(req.method);
     //res.status(200).send(req.headers.host);
-    res.status(200).send(`<h1>${req.headers.host}</h1>`);
+    //res.status(200).send(req.headers.host});
+    //res.status(200).send(req.cookies);
+    //res.status(200).send(req.signedCookies);
+    res.status(200).send(`Session Id is : ${req.sessionID}, views: ${req.session.views['/']}`);
 });
 
+app.get("/cut",(req,res)=>{
+    req.session.destroy();
+    res.status(200).send("session ends");
+})
+
+
+/* cookies */
+app.get("/setcookie",(req,res)=>{
+     //res.cookie("city","noida",{signed:true});
+    res.cookie("state","up",{maxAge:30000,httpOnly:true});
+    res.status(200).send("cookie saved");
+});
+app.get("/getcookie",(req,res)=>{
+    res.status(200).send(req.cookies);
+})
 
 app.get("/search",(req,res)=>{
     res.status(200).send(`Query is ${req.query.car}`);
