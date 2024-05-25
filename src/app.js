@@ -9,8 +9,8 @@ const parseurl=require("parseurl");
 
 
 const app=express();
-//app.use(express.static(path.resolve("src/public")));
-//app.use(express.static(path.resolve("node_modules/bootstrap/dist")));
+app.use(express.static(path.resolve("src/public")));
+app.use(express.static(path.resolve("node_modules/bootstrap/dist")));
 
 app.set('trust proxy', 1); 
 app.use(session({
@@ -43,6 +43,7 @@ app.use((req,res,next)=>{
 
 const admin=require("./routes/admin");
 const user=require("./routes/user");
+const { log } = require("console");
 
 app.use('/admin',admin);
 app.use('/user',user);
@@ -81,16 +82,8 @@ app.get("/search",(req,res)=>{
 });
 
 app.post("/login",(req,res)=>{
-
+    //res.header('Access-Control-Allow-Origin',"*");
     res.status(200).json(req.body);
-    
-    /* if(req.body.email=="admin@domain" && req.body.password=="123456"){
-        res.status(200).json('Hello Admin');
-    }
-    else{
-        res.status(200).json('invalid name or password');
-    } */
-
 });
 
 /* parameters */
@@ -109,14 +102,38 @@ app.get("/:brand/:product/:model",(req,res)=>{
 }); */
 
 
+const data=[
+    {"name": "swift 2022", "type": "hatchback", "price":820000},
+    {"name": "swift 2024", "type": "hatchback", "price":920000},
+    {"name": "dzire", "type": "sedan", "price":880000},
+    {"name": "ciaz", "type": "sedan", "price":1000000},
+    {"name": "baleno", "type": "hatchback", "price":850000},
+    {"name": "brezza", "type": "suv", "price":990000},
+    {"name": "grand vitara", "type": "suv", "price":1790000},
+    {"name": "grand vitara hybrid", "type": "suv", "price":1990000},
+    {"name": "alto", "type": "hatchback", "price":400000},
+    {"name": "wagon r", "type": "hatchback", "price":500000},
+    {"name": "jimny", "type": "suv", "price":1400000}
+];
+
+
 
 /* basic APIs */
 app.get("/api",(req,res)=>{
-    return res.status(200).json({message:"GET API"});
+    res.header('Access-Control-Allow-Origin',"*");
+    //return res.status(200).send("response");
+    //return res.status(200).json({res:data});
+    return res.status(200).json(data);
 });
 app.post("/api",(req,res)=>{
     res.header('Access-Control-Allow-Origin',"*");
-    return res.status(200).json({message:"POST API"});
+    const x=JSON.parse(req.body);
+    const y=x.q.toLowerCase(); 
+
+    const z=data.filter(i=>i.name.includes(y));
+    //const z=data.filter(i=>y==new RegExp( i.name, 'i'));
+
+    return res.status(200).json(z);
 });
 
 
