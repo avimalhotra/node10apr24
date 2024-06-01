@@ -6,6 +6,20 @@ const bp=require("body-parser");
 const cookie=require("cookie-parser");
 const session=require("express-session");
 const parseurl=require("parseurl");
+const multer=require("multer");
+//const upload=multer({dest:"src/public/uploads"});
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'src/public/uploads/')
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname);          // for original name 
+      //cb(null, Date.now() + path.extname(file.originalname)) 
+    }
+  });
+
+  const upload=multer({storage:storage});
+  const fields=upload.fields([{ name: 'resume', maxCount: 1 }, { name: 'resume', maxCount: 4 }]);
 
 
 const app=express();
@@ -64,7 +78,18 @@ app.get("/",(req,res)=>{
 app.get("/cut",(req,res)=>{
     req.session.destroy();
     res.status(200).send("session ends");
-})
+});
+
+// app.post("/upload",upload.array('resume',2),(req,res)=>{
+//     //console.log( req.files );
+//     res.status(200).send(`files uploaded`);
+// });
+app.post("/upload",fields,(req,res)=>{
+    console.log( req.files );
+    res.status(200).send(`files uploaded`);
+});
+
+
 
 
 /* cookies */

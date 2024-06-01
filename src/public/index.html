@@ -10,68 +10,17 @@
 <body>
     <div class="container">
         <h1>Hello Express</h1>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam esse dolorem magni molestias vel autem possimus, nemo facere sequi, praesentium dolore! Sit amet reiciendis est eos mollitia, temporibus unde maiores.</p>
+     
         <section>
-            <h2>Get</h2>
-            <form action="/search">
-                <div class="row g-3 align-items-center">
-                    <div class="col-auto">
-                      <label for="search" class="col-form-label">Search</label>
-                    </div>
-                    <div class="col-auto">
-                      <input type="text" autocomplete="off" id="search" class="form-control" name="car" list="cars" required>
-                    </div>
-                    <div class="col-auto">
-                      <button class="btn btn-primary">Search</button>
-                    </div>
-                  </div>
-                  <datalist id="cars"></datalist>
-            </form>
-            <h2>Post</h2>
-           <!--  <form action="/login" method="post" name="login">
-                <div class="row g-3 align-items-center">
-                    <div class="col-auto">
-                      <label for="email" class="col-form-label">Email</label>
-                    </div>
-                    <div class="col-auto">
-                      <input type="email" id="email" class="form-control" name="email" required>
-                    </div>
-                    <div class="col-auto">
-                        <label for="pass" class="col-form-label">Password</label>
-                      </div>
-                      <div class="col-auto">
-                        <input type="password" id="pass" class="form-control" name="password" required>
-                      </div>
-                    <div class="col-auto">
-                      <button class="btn btn-primary">Login</button>
-                    </div>
-                  </div>
-            </form> -->
+           <form enctype="multipart/form-data" action="/upload" method="post">
+            <label>File : <input class="form-control" type="file" multiple name="resume" required></label>
+            <button class="btn btn-primary">Check</button>
+           </form>
         </section>
       </div>
 <script src="js/bootstrap.bundle.min.js"></script> 
 <script>
-   
-//fetch("/api").then(i=>i.json()).then(i=>{console.table(i);}).catch(e=>console.warn(e));
 
-
-document.querySelector("#search").addEventListener("input",function(){
-  const x=this.value;
-
-  if(x.length>=3){
-    fetch("/api",{method:"POST",body:JSON.stringify({q:x})}).then(i=>i.json()).then(i=>{
-      
-      document.querySelector("#cars").innerHTML="";
-      i=Array.from(new Set(i));
-
-      i.forEach(element => {
-          document.querySelector("#cars").innerHTML+=`<option>${element.name}</option>`;
-      });
-
-    }).catch(e=>console.warn((e)));
-  }
-
-});
 
 </script>   
 </body>
