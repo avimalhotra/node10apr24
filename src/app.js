@@ -6,6 +6,7 @@ const bp=require("body-parser");
 const cookie=require("cookie-parser");
 const session=require("express-session");
 const parseurl=require("parseurl");
+const app=express();
 const multer=require("multer");
 //const upload=multer({dest:"src/public/uploads"});
 const storage = multer.diskStorage({
@@ -22,9 +23,11 @@ const storage = multer.diskStorage({
   const fields=upload.fields([{ name: 'resume', maxCount: 1 }, { name: 'resume', maxCount: 4 }]);
 
 
-const app=express();
+
+
 app.use(express.static(path.resolve("src/public")));
 app.use(express.static(path.resolve("node_modules/bootstrap/dist")));
+app.use(express.static("node_modules/socket.io/client-dist/"));
 
 app.set('trust proxy', 1); 
 app.use(session({
@@ -43,6 +46,7 @@ app.use(bp.urlencoded({ extended: false }));
     console.log(`Login at ${new Date().toLocaleString()}`);
     next();
 }); */
+
 app.use((req,res,next)=>{
 
     if(!req.session.views ){req.session.views={}};
@@ -88,6 +92,7 @@ app.post("/upload",fields,(req,res)=>{
     console.log( req.files );
     res.status(200).send(`files uploaded`);
 });
+
 
 
 
