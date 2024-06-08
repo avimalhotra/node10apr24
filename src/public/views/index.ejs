@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= name %></title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <%- include('header'); %>
+        <%- include('nav'); %>
+        <main class="bg-info-subtle p-2">
+            <h2>Main</h2>
+            <ol>
+                <% data.forEach(function(name) { %>
+                    <li><%= name %></li>
+                <% }); %>
+            </ol>
+        </main>  
+            <%- include('footer'); %>
+      </div>
+<script src="js/bootstrap.bundle.min.js"></script> 
+</body>
+</html>

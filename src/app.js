@@ -7,6 +7,12 @@ const cookie=require("cookie-parser");
 const session=require("express-session");
 const parseurl=require("parseurl");
 const app=express();
+const ejs=require("ejs");
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'public/views'));
+
+
 const multer=require("multer");
 //const upload=multer({dest:"src/public/uploads"});
 const storage = multer.diskStorage({
@@ -76,8 +82,22 @@ app.get("/",(req,res)=>{
     //res.status(200).send(req.headers.host});
     //res.status(200).send(req.cookies);
     //res.status(200).send(req.signedCookies);
-    res.status(200).send(`Session Id is : ${req.sessionID}, views: ${req.session.views['/']}`);
+    //res.status(200).send(`Session Id is : ${req.sessionID}, views: ${req.session.views['/']}`);
+    res.status(200).render('index',{name:"Home Page",data:["jan","feb","mar"]});
 });
+app.get("/about",(req,res)=>{
+    res.setHeader('Content-Type','text/html');
+    res.status(200).render('about',{name:"About US"});
+})
+app.get("/blog",(req,res)=>{
+    res.setHeader('Content-Type','text/html');
+    res.status(200).render('blog',{name:"Blog"});
+})
+app.get("/contact",(req,res)=>{
+    res.setHeader('Content-Type','text/html');
+    res.status(200).render('contact',{name:"Contact US"});
+})
+
 
 app.get("/cut",(req,res)=>{
     req.session.destroy();
@@ -95,8 +115,6 @@ app.post("/upload",fields,(req,res)=>{
 
 
 
-
-
 /* cookies */
 app.get("/setcookie",(req,res)=>{
      //res.cookie("city","noida",{signed:true});
@@ -109,6 +127,9 @@ app.get("/getcookie",(req,res)=>{
 
 app.get("/search",(req,res)=>{
     res.status(200).send(`Query is ${req.query.car}`);
+});
+app.get("/mail",(req,res)=>{
+    res.status(200).redirect("mail.html");
 });
 
 app.post("/login",(req,res)=>{
@@ -171,7 +192,8 @@ app.post("/api",(req,res)=>{
 /* wildcard handler */
 app.get("/**",(req,res)=>{
     res.setHeader('Content-Type','text/html');
-    res.status(404).send("404, Page not found");
+    //res.status(404).send("404, Page not found");
+    res.status(404).render("error",{name:"ERROR", status: "404, Page Not Found"});
 });
 
 app.listen(process.env.PORT,()=>{
